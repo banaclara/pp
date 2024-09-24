@@ -7,6 +7,8 @@ import models.*;
 import java.util.Scanner;
 
 public class ClienteService {
+    EnderecoService enderecoService = new EnderecoService();
+
     public void cadastrar(Scanner scanner, ClienteDAO dao) {
         System.out.println("Cadastrar novo cliente:");
 
@@ -14,7 +16,11 @@ public class ClienteService {
         String nome = scanner.next();
         System.out.println("Data de nascimento (no formato YYYY-MM-DD):");
         String nascimento = scanner.next();
+
         System.out.println("Telefone:");
+        System.out.println("DDD:");
+        String ddd = scanner.next();
+        System.out.println("Número:");
         String numero = scanner.next();
 
         System.out.println("Código do cliente:");
@@ -22,23 +28,13 @@ public class ClienteService {
         System.out.println("Profissão:");
         String profissaoAtual = scanner.next();
 
-        System.out.println("Endereço:");
-        System.out.println("Estado:");
-        String estado = scanner.next();
-        System.out.println("Cidade:");
-        String cidade = scanner.next();
-        System.out.println("Rua:");
-        String rua = scanner.next();
-        System.out.println("Complemento:");
-        String complemento = scanner.next();
+        Endereco endereco = enderecoService.cadastrar(scanner);
 
         Cliente cliente = new Cliente(nome, java.sql.Date.valueOf(nascimento), codigo);
 
-        Endereco endereco = new Endereco(estado, cidade, rua, complemento);
-
         Profissao profissao = new Profissao(profissaoAtual);
 
-        Telefone tel = new Telefone(numero);
+        Telefone tel = new Telefone(ddd, numero);
 
         dao.salvar(cliente, profissao, endereco, tel);
 

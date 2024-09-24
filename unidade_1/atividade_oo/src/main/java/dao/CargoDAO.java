@@ -19,10 +19,10 @@ public class CargoDAO {
         try {
             try (PreparedStatement buscarNoBD = connection.prepareStatement(consulta)) {
                 buscarNoBD.setString(1, cargo.getFuncao());
-                ResultSet rs = buscarNoBD.executeQuery();
+                ResultSet resultadoConsulta = buscarNoBD.executeQuery();
 
-                if (rs.next()) {
-                    return rs.getInt("id");
+                if (resultadoConsulta.next()) {
+                    return resultadoConsulta.getInt("id");
                 }
             }
 
@@ -30,9 +30,9 @@ public class CargoDAO {
                 salvarCargo.setString(1, cargo.getFuncao());
                 salvarCargo.executeUpdate();
 
-                ResultSet rsInserir = salvarCargo.getGeneratedKeys();
-                if (rsInserir.next()) {
-                    return rsInserir.getInt(1);
+                ResultSet resultadoInsert = salvarCargo.getGeneratedKeys();
+                if (resultadoInsert.next()) {
+                    return resultadoInsert.getInt(1);
                 }
             }
         } catch (SQLException e) {

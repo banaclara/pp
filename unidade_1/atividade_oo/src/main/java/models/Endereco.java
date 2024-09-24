@@ -4,6 +4,8 @@ public class Endereco {
     private String estado;
     private String cidade;
     private String rua;
+    private String CEP;
+    private String numero;
     private String complemento;
 
     public Endereco(String estado, String cidade, String rua, String complemento) {

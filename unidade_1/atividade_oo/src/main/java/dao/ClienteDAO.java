@@ -38,9 +38,9 @@ public class ClienteDAO {
             salvarCliente.setInt(3, profissaoId);
             salvarCliente.executeUpdate();
 
-            ResultSet rs = salvarCliente.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
+            ResultSet resultadoInsert = salvarCliente.getGeneratedKeys();
+            if (resultadoInsert.next()) {
+                return resultadoInsert.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();

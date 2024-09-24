@@ -22,10 +22,10 @@ public class EnderecoDAO {
                 buscarNoDB.setString(2, endereco.getCidade());
                 buscarNoDB.setString(3, endereco.getRua());
                 buscarNoDB.setString(4, endereco.getComplemento());
-                ResultSet rs = buscarNoDB.executeQuery();
+                ResultSet resultadoConsulta = buscarNoDB.executeQuery();
 
-                if (rs.next()) {
-                    return rs.getInt("id");
+                if (resultadoConsulta.next()) {
+                    return resultadoConsulta.getInt("id");
                 }
             }
 
@@ -36,9 +36,9 @@ public class EnderecoDAO {
                 salvarEndereco.setString(4, endereco.getComplemento());
                 salvarEndereco.executeUpdate();
 
-                ResultSet rsInserir = salvarEndereco.getGeneratedKeys();
-                if (rsInserir.next()) {
-                    return rsInserir.getInt(1);
+                ResultSet resultadoInsert = salvarEndereco.getGeneratedKeys();
+                if (resultadoInsert.next()) {
+                    return resultadoInsert.getInt(1);
                 }
             }
         } catch (SQLException e) {

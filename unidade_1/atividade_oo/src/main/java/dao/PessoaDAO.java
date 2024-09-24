@@ -23,9 +23,9 @@ public class PessoaDAO {
             salvarPessoa.setInt(3, enderecoId);
             salvarPessoa.executeUpdate();
 
-            ResultSet rs = salvarPessoa.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
+            ResultSet resultadoInsert = salvarPessoa.getGeneratedKeys();
+            if (resultadoInsert.next()) {
+                return resultadoInsert.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,9 +38,9 @@ public class PessoaDAO {
         String sql = "SELECT dataNascimento FROM Pessoa WHERE id = ?";
         try (PreparedStatement consulta = connection.prepareStatement(sql)) {
             consulta.setInt(1, pessoaId);
-            ResultSet rs = consulta.executeQuery();
-            if (rs.next()) {
-                Date dataNascimento = rs.getDate("dataNascimento");
+            ResultSet resultadoConsulta = consulta.executeQuery();
+            if (resultadoConsulta.next()) {
+                Date dataNascimento = resultadoConsulta.getDate("dataNascimento");
                 return Period.between(dataNascimento.toLocalDate(), LocalDate.now()).getYears();
             }
         } catch (SQLException e) {

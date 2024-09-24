@@ -48,9 +48,9 @@ public class FuncionarioDAO {
 
     public void deletar(int id) {
         String sql = "DELETE FROM Pessoa WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
+        try (PreparedStatement deletar = connection.prepareStatement(sql)) {
+            deletar.setInt(1, id);
+            deletar.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -60,9 +60,9 @@ public class FuncionarioDAO {
         String sql = "SELECT salario FROM Funcionario WHERE id = ?";
         try (PreparedStatement consulta = connection.prepareStatement(sql)) {
             consulta.setInt(1, funcionarioId);
-            ResultSet rs = consulta.executeQuery();
-            if (rs.next()) {
-                return rs.getDouble("salario");
+            ResultSet resultadoConsulta = consulta.executeQuery();
+            if (resultadoConsulta.next()) {
+                return resultadoConsulta.getDouble("salario");
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -17,19 +17,18 @@ public class Main {
             PessoaDAO pessoaDAO = new PessoaDAO(connection);
             FuncionarioService funcionarioService = new FuncionarioService();
             ClienteService clienteService = new ClienteService();
-            Menu menu = new Menu();
             Scanner scanner = new Scanner(System.in);
 
             while (true) {
-                menu.principal();
+                Menu.principal();
                 int opt;
                 opt = scanner.nextInt();
                 switch (opt) {
                     case 1:
-                        menu.funcionarios(scanner, funcionarioService, funcionarioDAO, pessoaDAO);
+                        Menu.funcionarios(scanner, funcionarioService, funcionarioDAO, pessoaDAO);
                         break;
                     case 2:
-                        menu.clientes(scanner, clienteService, clienteDAO, pessoaDAO);
+                        Menu.clientes(scanner, clienteService, clienteDAO, pessoaDAO);
                         break;
                     case 3:
                         System.out.println("Encerrando o programa...");

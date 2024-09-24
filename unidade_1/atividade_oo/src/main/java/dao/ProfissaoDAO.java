@@ -20,10 +20,10 @@ public class ProfissaoDAO {
         try {
             try (PreparedStatement buscarNoBD = connection.prepareStatement(consulta)) {
                 buscarNoBD.setString(1, profissao.getNome());
-                ResultSet rs = buscarNoBD.executeQuery();
+                ResultSet resultadoConsulta = buscarNoBD.executeQuery();
 
-                if (rs.next()) {
-                    return rs.getInt("id");
+                if (resultadoConsulta.next()) {
+                    return resultadoConsulta.getInt("id");
                 }
             }
 
@@ -31,9 +31,9 @@ public class ProfissaoDAO {
                 salvarCargo.setString(1, profissao.getNome());
                 salvarCargo.executeUpdate();
 
-                ResultSet rsInserir = salvarCargo.getGeneratedKeys();
-                if (rsInserir.next()) {
-                    return rsInserir.getInt(1);
+                ResultSet resultadoInserir = salvarCargo.getGeneratedKeys();
+                if (resultadoInserir.next()) {
+                    return resultadoInserir.getInt(1);
                 }
             }
         } catch (SQLException e) {

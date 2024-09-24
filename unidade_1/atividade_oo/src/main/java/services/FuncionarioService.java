@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class FuncionarioService {
+    EnderecoService enderecoService = new EnderecoService();
+
     public void cadastrar(Scanner scanner, FuncionarioDAO dao) {
         System.out.println("Cadastrar novo funcionário:");
 
@@ -16,7 +18,11 @@ public class FuncionarioService {
         String nome = scanner.next();
         System.out.println("Data de nascimento (no formato YYYY-MM-DD):");
         String nascimento = scanner.next();
+
         System.out.println("Telefone:");
+        System.out.println("DDD:");
+        String ddd = scanner.next();
+        System.out.println("Número:");
         String numero = scanner.next();
 
         System.out.println("Matrícula do funcionário:");
@@ -28,23 +34,13 @@ public class FuncionarioService {
         System.out.println("Data de admissão:");
         String admissao = scanner.next();
 
-        System.out.println("Endereço:");
-        System.out.println("Estado:");
-        String estado = scanner.next();
-        System.out.println("Cidade:");
-        String cidade = scanner.next();
-        System.out.println("Rua:");
-        String rua = scanner.next();
-        System.out.println("Complemento:");
-        String complemento = scanner.next();
+        Endereco endereco = enderecoService.cadastrar(scanner);
 
         Funcionario funcionario = new Funcionario(nome, java.sql.Date.valueOf(nascimento), matricula, salario, java.sql.Date.valueOf(admissao));
 
-        Endereco endereco = new Endereco(estado, cidade, rua, complemento);
-
         Cargo cargo = new Cargo(cargoAtual);
 
-        Telefone tel = new Telefone(numero);
+        Telefone tel = new Telefone(ddd, numero);
 
         dao.salvar(funcionario, endereco, cargo, tel);
 
