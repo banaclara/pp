@@ -1,24 +1,25 @@
 package utils;
 
-import dao.CargoDAO;
 import dao.ClienteDAO;
 import dao.FuncionarioDAO;
 import dao.PessoaDAO;
-import models.Pessoa;
 import services.ClienteService;
 import services.FuncionarioService;
 
 import java.util.Scanner;
 
 public class Menu {
+
     public static void principal() {
         System.out.println("1 - Funcionários");
         System.out.println("2 - Clientes");
         System.out.println("3 - Sair do programa");
     }
 
-    public static void funcionarios(Scanner scanner, FuncionarioService service, FuncionarioDAO dao, PessoaDAO pDAO) {
+    public static void funcionarios(Scanner scanner, FuncionarioDAO dao, PessoaDAO pDAO) {
+        FuncionarioService service = new FuncionarioService();
         boolean sair = false;
+
         do {
             System.out.println("Escolha uma opção:");
             System.out.println("1. Cadastrar novo funcionário");
@@ -52,8 +53,10 @@ public class Menu {
         } while (!sair);
     }
 
-    public static void clientes(Scanner scanner, ClienteService service, ClienteDAO dao, PessoaDAO pDAO) {
+    public static void clientes(Scanner scanner, ClienteDAO dao, PessoaDAO pDAO) {
+        ClienteService service = new ClienteService();
         boolean sair = false;
+
         do {
             System.out.println("Escolha uma opção:");
             System.out.println("1. Inserir cliente");
@@ -77,5 +80,4 @@ public class Menu {
             }
         } while (!sair);
     }
-
 }

@@ -1,39 +1,33 @@
 package dao;
 
-import conn.Database;
 import models.*;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FuncionarioDAO {
     private final Connection connection;
     private final EnderecoDAO enderecoDAO;
-    private final CargoDAO cargoDAO;
     private final PessoaDAO pessoaDAO;
     private final TelefoneDAO telefoneDAO;
 
     public FuncionarioDAO(Connection connection) throws SQLException {
         this.connection = connection;
         this.enderecoDAO = new EnderecoDAO(connection);
-        this.cargoDAO = new CargoDAO(connection);
         this.pessoaDAO = new PessoaDAO(connection);
         this.telefoneDAO = new TelefoneDAO(connection);
     }
 
     public void salvar(Funcionario funcionario, Endereco endereco, Cargo cargo, Telefone telefone) {
         int enderecoId = enderecoDAO.buscarOuCriar(endereco);
-        int cargoId = cargoDAO.buscarOuCriar(cargo);
 
         int idPessoa = pessoaDAO.salvar(funcionario, enderecoId);
         funcionario.setId(idPessoa);
 
-        String inserir = "INSERT INTO Funcionario (id, matricula, cargo_id, salario, dataAdmissao) VALUES (?, ?, ?, ?, ?)";
+        String inserir = "INSERT INTO Funcionario (id, matricula, cargo, salario, dataAdmissao) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement salvarFuncionario = connection.prepareStatement(inserir)) {
             salvarFuncionario.setInt(1, funcionario.getId());
             salvarFuncionario.setString(2, funcionario.getMatricula());
-            salvarFuncionario.setInt(3, cargoId);
+            salvarFuncionario.setObject(3, cargo, java.sql.Types.OTHER);
             salvarFuncionario.setDouble(4, funcionario.getSalario());
             salvarFuncionario.setDate(5, funcionario.getDataAdmissao());
             salvarFuncionario.executeUpdate();
@@ -82,11 +76,10 @@ public class FuncionarioDAO {
     }
 
     public void atualizarCargo(int funcionarioId, Cargo cargo) {
-        int cargoId = cargoDAO.buscarOuCriar(cargo);
-        String sql = "UPDATE Funcionario SET cargo_id = ? WHERE id = ?";
+        String sql = "UPDATE Funcionario SET cargo = ? WHERE id = ?";
 
         try (PreparedStatement atualizarCargo = connection.prepareStatement(sql)) {
-            atualizarCargo.setInt(1, cargoId);
+            atualizarCargo.setString(1, cargo.name());
             atualizarCargo.setInt(2, funcionarioId);
             atualizarCargo.executeUpdate();
         } catch (SQLException e) {

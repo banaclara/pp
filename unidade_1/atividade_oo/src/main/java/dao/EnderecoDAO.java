@@ -1,6 +1,5 @@
 package dao;
 
-import conn.Database;
 import models.Endereco;
 
 import java.sql.*;
@@ -13,15 +12,18 @@ public class EnderecoDAO {
     }
 
     public int buscarOuCriar(Endereco endereco) {
-        String consulta = "SELECT id FROM Endereco WHERE estado = ? AND cidade = ? AND rua = ? AND complemento = ?";
-        String inserir = "INSERT INTO Endereco (estado, cidade, rua, complemento) VALUES (?, ?, ?, ?)";
+        String consulta = "SELECT id FROM Endereco WHERE pais = ? AND estado = ? AND cidade = ? AND rua = ? AND cep = ? AND numero = ? AND complemento = ?";
+        String inserir = "INSERT INTO Endereco (pais, estado, cidade, rua, cep, numero, complemento) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             try (PreparedStatement buscarNoDB = connection.prepareStatement(consulta)) {
-                buscarNoDB.setString(1, endereco.getEstado());
-                buscarNoDB.setString(2, endereco.getCidade());
-                buscarNoDB.setString(3, endereco.getRua());
-                buscarNoDB.setString(4, endereco.getComplemento());
+                buscarNoDB.setString(1, endereco.getPais());
+                buscarNoDB.setString(2, endereco.getEstado());
+                buscarNoDB.setString(3, endereco.getCidade());
+                buscarNoDB.setString(4, endereco.getRua());
+                buscarNoDB.setString(5, endereco.getCEP());
+                buscarNoDB.setString(6, endereco.getNumero());
+                buscarNoDB.setString(7, endereco.getComplemento());
                 ResultSet resultadoConsulta = buscarNoDB.executeQuery();
 
                 if (resultadoConsulta.next()) {
@@ -30,10 +32,13 @@ public class EnderecoDAO {
             }
 
             try (PreparedStatement salvarEndereco = connection.prepareStatement(inserir, Statement.RETURN_GENERATED_KEYS)) {
-                salvarEndereco.setString(1, endereco.getEstado());
-                salvarEndereco.setString(2, endereco.getCidade());
-                salvarEndereco.setString(3, endereco.getRua());
-                salvarEndereco.setString(4, endereco.getComplemento());
+                salvarEndereco.setString(1, endereco.getPais());
+                salvarEndereco.setString(2, endereco.getEstado());
+                salvarEndereco.setString(3, endereco.getCidade());
+                salvarEndereco.setString(4, endereco.getRua());
+                salvarEndereco.setString(5, endereco.getCEP());
+                salvarEndereco.setString(6, endereco.getNumero());
+                salvarEndereco.setString(7, endereco.getComplemento());
                 salvarEndereco.executeUpdate();
 
                 ResultSet resultadoInsert = salvarEndereco.getGeneratedKeys();

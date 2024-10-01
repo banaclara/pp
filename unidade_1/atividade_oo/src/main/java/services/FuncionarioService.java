@@ -1,11 +1,9 @@
 package services;
 
-import dao.CargoDAO;
 import dao.FuncionarioDAO;
 import dao.PessoaDAO;
 import models.*;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class FuncionarioService {
@@ -15,30 +13,29 @@ public class FuncionarioService {
         System.out.println("Cadastrar novo funcionário:");
 
         System.out.println("Nome:");
-        String nome = scanner.next();
+        String nome = scanner.nextLine();
         System.out.println("Data de nascimento (no formato YYYY-MM-DD):");
-        String nascimento = scanner.next();
+        String nascimento = scanner.nextLine();
 
         System.out.println("Telefone:");
         System.out.println("DDD:");
-        String ddd = scanner.next();
+        String ddd = scanner.nextLine();
         System.out.println("Número:");
-        String numero = scanner.next();
+        String numero = scanner.nextLine();
 
         System.out.println("Matrícula do funcionário:");
-        String matricula = scanner.next();
-        System.out.println("Cargo:");
-        String cargoAtual = scanner.next();
+        String matricula = scanner.nextLine();
+        System.out.println("Cargo (opções: GERENTE, ANALISTA, DESENVOLVEDOR, DEVOPS, DESIGNER, SUPORTE, QA, ESTAGIARIO):");
+        Cargo cargo = Cargo.valueOf(scanner.next().toUpperCase());
         System.out.println("Salário:");
         double salario = scanner.nextDouble();
+        scanner.nextLine();
         System.out.println("Data de admissão:");
-        String admissao = scanner.next();
+        String admissao = scanner.nextLine();
 
         Endereco endereco = enderecoService.cadastrar(scanner);
 
         Funcionario funcionario = new Funcionario(nome, java.sql.Date.valueOf(nascimento), matricula, salario, java.sql.Date.valueOf(admissao));
-
-        Cargo cargo = new Cargo(cargoAtual);
 
         Telefone tel = new Telefone(ddd, numero);
 
@@ -50,8 +47,10 @@ public class FuncionarioService {
     public void reajustarSalario(Scanner scanner, FuncionarioDAO dao) {
         System.out.println("Id do funcionário:");
         int funcionarioId = scanner.nextInt();
+        scanner.nextLine();
         System.out.println("Percentual de reajuste salarial:");
         double percentualReajuste = scanner.nextDouble();
+        scanner.nextLine();
 
         double salarioAtual = dao.getSalario(funcionarioId);
 
@@ -66,18 +65,19 @@ public class FuncionarioService {
     public void promover(Scanner scanner, FuncionarioDAO dao) {
         System.out.println("Id do funcionário:");
         int funcionarioId = scanner.nextInt();
+        scanner.nextLine();
         System.out.println("Novo cargo:");
-        String novoCargo = scanner.next();
+        Cargo novoCargo = Cargo.valueOf(scanner.next().toUpperCase());
 
-        Cargo cargo = new Cargo(novoCargo);
-        dao.atualizarCargo(funcionarioId, cargo);
+        dao.atualizarCargo(funcionarioId, novoCargo);
 
-        System.out.println("Funcionário promovido!");
+        System.out.println("Novo cargo atribuído ao funcionário!");
     }
 
     public void obterIdade(Scanner scanner, PessoaDAO dao) {
         System.out.println("Id do funcionário:");
         int funcionarioId = scanner.nextInt();
+        scanner.nextLine();
         int idade = dao.obterIdade(funcionarioId);
 
         System.out.println("O funcionário tem " + idade + " anos.");

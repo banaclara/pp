@@ -1,22 +1,13 @@
 import conn.Database;
-import dao.*;
-import services.ClienteService;
-import services.FuncionarioService;
 import utils.Menu;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            Connection connection = Database.getConnection();
-            FuncionarioDAO funcionarioDAO = new FuncionarioDAO(connection);
-            ClienteDAO clienteDAO = new ClienteDAO(connection);
-            PessoaDAO pessoaDAO = new PessoaDAO(connection);
-            FuncionarioService funcionarioService = new FuncionarioService();
-            ClienteService clienteService = new ClienteService();
+            Database db = new Database();
             Scanner scanner = new Scanner(System.in);
 
             while (true) {
@@ -25,14 +16,14 @@ public class Main {
                 opt = scanner.nextInt();
                 switch (opt) {
                     case 1:
-                        Menu.funcionarios(scanner, funcionarioService, funcionarioDAO, pessoaDAO);
+                        Menu.funcionarios(scanner, db.getFuncionarioDAO(), db.getPessoaDAO());
                         break;
                     case 2:
-                        Menu.clientes(scanner, clienteService, clienteDAO, pessoaDAO);
+                        Menu.clientes(scanner, db.getClienteDAO(), db.getPessoaDAO());
                         break;
                     case 3:
-                        System.out.println("Encerrando o programa...");
-                        connection.close();
+                        System.out.println("Encerrando...");
+                        db.getConnection().close();
                         scanner.close();
                         return;
                     default:
@@ -40,7 +31,7 @@ public class Main {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Erro na conexão ao banco de dados: " + e.getMessage());
+            System.out.println("Erro na conexão; " + e.getMessage());
         }
     }
 }

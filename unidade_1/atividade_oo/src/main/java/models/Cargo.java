@@ -1,13 +1,12 @@
 package models;
 
-public class Cargo {
-    private String funcao;
-
-    public Cargo(String funcao) {
-        this.funcao = funcao;
-    }
-
-    public String getFuncao() {
-        return funcao;
-    }
+public enum Cargo {
+    GERENTE,
+    ANALISTA,
+    DESENVOLVEDOR,
+    DEVOPS,
+    DESIGNER,
+    SUPORTE,
+    QA,
+    ESTAGIARIO;
 }

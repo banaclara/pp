@@ -1,6 +1,7 @@
 package models;
 
 public class Endereco {
+    private String pais;
     private String estado;
     private String cidade;
     private String rua;
@@ -8,11 +9,19 @@ public class Endereco {
     private String numero;
     private String complemento;
 
-    public Endereco(String estado, String cidade, String rua, String complemento) {
+    public Endereco(String pais, String estado, String cidade, String rua, String CEP, String numero, String complemento) {
+        this.pais = pais;
         this.estado = estado;
         this.cidade = cidade;
         this.rua = rua;
+        this.CEP = CEP;
+        this.numero = numero;
         this.complemento = complemento;
+
+    }
+
+    public String getPais() {
+        return pais;
     }
 
     public String getEstado() {
@@ -25,6 +34,14 @@ public class Endereco {
 
     public String getRua() {
         return rua;
+    }
+
+    public String getCEP() {
+        return CEP;
+    }
+
+    public String getNumero() {
+        return numero;
     }
 
     public String getComplemento() {

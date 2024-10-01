@@ -3,25 +3,23 @@ CREATE DATABASE ppunidadeI;
 USE ppunidadeI;
 
 CREATE TABLE Endereco (
-    id INT IDENTITY PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
+    pais VARCHAR(100) NOT NULL,
     estado VARCHAR(100) NOT NULL,
     cidade VARCHAR(100) NOT NULL,
     rua VARCHAR(100) NOT NULL,
-    complemento VARCHAR(100) DEFAULT NULL
-);
-
-CREATE TABLE Cargo (
-    id INT IDENTITY PRIMARY KEY,
-    funcao VARCHAR(100) NOT NULL
+    cep VARCHAR(10) NOT NULL,
+    numero VARCHAR(10),
+    complemento VARCHAR(100)
 );
 
 CREATE TABLE Profissao (
-    id INT IDENTITY PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Pessoa (
-    id INT IDENTITY PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     dataNascimento DATE NOT NULL,
     endereco_id INT,
@@ -29,21 +27,31 @@ CREATE TABLE Pessoa (
 );
 
 CREATE TABLE Telefone (
-    id INT IDENTITY PRIMARY KEY,
-    ddd VARCHAR(2) NOT NULL,
+    id SERIAL PRIMARY KEY,
+    ddd VARCHAR(3) NOT NULL,
     numero VARCHAR(20) NOT NULL,
     pessoa_id INT,
     FOREIGN KEY (pessoa_id) REFERENCES Pessoa(id) ON DELETE CASCADE
 );
 
+CREATE TYPE cargo_enum AS ENUM (
+    'GERENTE',
+    'ANALISTA',
+    'DESENVOLVEDOR',
+    'DEVOPS',
+    'DESIGNER',
+    'SUPORTE',
+    'QA',
+    'ESTAGIARIO'
+);
+
 CREATE TABLE Funcionario (
     id INT PRIMARY KEY,
     matricula VARCHAR(15) NOT NULL,
-    cargo_id INT,
+    cargo cargo_enum NOT NULL,
     salario DECIMAL(10, 2) NOT NULL,
     dataAdmissao DATE NOT NULL,
-    FOREIGN KEY (id) REFERENCES Pessoa(id) ON DELETE CASCADE,
-    FOREIGN KEY (cargo_id) REFERENCES Cargo(id) ON DELETE SET NULL
+    FOREIGN KEY (id) REFERENCES Pessoa(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Cliente (

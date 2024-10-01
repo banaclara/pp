@@ -13,20 +13,20 @@ public class ClienteService {
         System.out.println("Cadastrar novo cliente:");
 
         System.out.println("Nome:");
-        String nome = scanner.next();
+        String nome = scanner.nextLine();
         System.out.println("Data de nascimento (no formato YYYY-MM-DD):");
-        String nascimento = scanner.next();
+        String nascimento = scanner.nextLine();
 
         System.out.println("Telefone:");
         System.out.println("DDD:");
-        String ddd = scanner.next();
+        String ddd = scanner.nextLine();
         System.out.println("Número:");
-        String numero = scanner.next();
+        String numero = scanner.nextLine();
 
         System.out.println("Código do cliente:");
-        String codigo = scanner.next();
+        String codigo = scanner.nextLine();
         System.out.println("Profissão:");
-        String profissaoAtual = scanner.next();
+        String profissaoAtual = scanner.nextLine();
 
         Endereco endereco = enderecoService.cadastrar(scanner);
 
@@ -44,6 +44,7 @@ public class ClienteService {
     public void obterIdade(Scanner scanner, PessoaDAO dao) {
         System.out.println("Id do cliente:");
         int clienteId = scanner.nextInt();
+        scanner.nextLine();
         int idade = dao.obterIdade(clienteId);
 
         System.out.println("O cliente tem " + idade + " anos.");
