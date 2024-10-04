@@ -79,7 +79,7 @@ public class FuncionarioDAO {
         String sql = "UPDATE Funcionario SET cargo = ? WHERE id = ?";
 
         try (PreparedStatement atualizarCargo = connection.prepareStatement(sql)) {
-            atualizarCargo.setString(1, cargo.name());
+            atualizarCargo.setObject(1, cargo, java.sql.Types.OTHER);
             atualizarCargo.setInt(2, funcionarioId);
             atualizarCargo.executeUpdate();
         } catch (SQLException e) {

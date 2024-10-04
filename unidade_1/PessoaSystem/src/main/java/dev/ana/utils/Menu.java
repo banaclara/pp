@@ -1,22 +1,42 @@
 package dev.ana.utils;
 
+import dev.ana.conn.Database;
 import dev.ana.dao.ClienteDAO;
 import dev.ana.dao.FuncionarioDAO;
 import dev.ana.dao.PessoaDAO;
-import dev.ana.services.ClienteService;
-import dev.ana.services.FuncionarioService;
+import dev.ana.services.implementation.ClienteService;
+import dev.ana.services.implementation.FuncionarioService;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Menu {
-
-    public static void principal() {
-        System.out.println("1 - Funcionários");
-        System.out.println("2 - Clientes");
-        System.out.println("3 - Sair do programa");
+    public static void principal(Scanner scanner, Database db) throws SQLException {
+        while (true) {
+            System.out.println("1 - Funcionários");
+            System.out.println("2 - Clientes");
+            System.out.println("3 - Sair do programa");
+            int opt;
+            opt = scanner.nextInt();
+            switch (opt) {
+                case 1:
+                    funcionarios(scanner, db.getFuncionarioDAO(), db.getPessoaDAO());
+                    break;
+                case 2:
+                    clientes(scanner, db.getClienteDAO(), db.getPessoaDAO());
+                    break;
+                case 3:
+                    System.out.println("Encerrando...");
+                    db.getConnection().close();
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
     }
 
-    public static void funcionarios(Scanner scanner, FuncionarioDAO dao, PessoaDAO pDAO) {
+    private static void funcionarios(Scanner scanner, FuncionarioDAO dao, PessoaDAO pDAO) {
         FuncionarioService service = new FuncionarioService();
         boolean sair = false;
 
@@ -53,7 +73,7 @@ public class Menu {
         } while (!sair);
     }
 
-    public static void clientes(Scanner scanner, ClienteDAO dao, PessoaDAO pDAO) {
+    private static void clientes(Scanner scanner, ClienteDAO dao, PessoaDAO pDAO) {
         ClienteService service = new ClienteService();
         boolean sair = false;
 

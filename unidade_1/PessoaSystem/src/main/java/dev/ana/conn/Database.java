@@ -46,9 +46,9 @@ public class Database {
                 .load();
 
         try {
-            var result = flyway.migrate();
-            int migrationsApplied = result.migrationsExecuted;
-            if (migrationsApplied > 0) {
+            var res = flyway.migrate();
+            int migrationsAplicadas = res.migrationsExecuted;
+            if (migrationsAplicadas > 0) {
                 System.out.println("Migrations aplicadas.");
             } else {
                 System.out.println();

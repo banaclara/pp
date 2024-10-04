@@ -1,32 +1,27 @@
-package dev.ana.services;
+package dev.ana.services.implementation;
 
 import dev.ana.dao.ClienteDAO;
 import dev.ana.dao.PessoaDAO;
 import dev.ana.models.*;
+import dev.ana.services.ClienteServiceInterface;
 
 import java.util.Scanner;
 
-public class ClienteService {
+import static dev.ana.utils.Leitor.*;
+
+public class ClienteService implements ClienteServiceInterface {
     EnderecoService enderecoService = new EnderecoService();
 
+    @Override
     public void cadastrar(Scanner scanner, ClienteDAO dao) {
         System.out.println("Cadastrar novo cliente:");
 
-        System.out.println("Nome:");
-        String nome = scanner.nextLine();
-        System.out.println("Data de nascimento (no formato YYYY-MM-DD):");
-        String nascimento = scanner.nextLine();
+        String nome = obterInput(scanner, "Nome:");
+        String nascimento = obterData(scanner, "Data de nascimento:");
+        Telefone tel = obterTelefone(scanner);
 
-        System.out.println("Telefone:");
-        System.out.println("DDD:");
-        String ddd = scanner.nextLine();
-        System.out.println("Número:");
-        String numero = scanner.nextLine();
-
-        System.out.println("Código do cliente:");
-        String codigo = scanner.nextLine();
-        System.out.println("Profissão:");
-        String profissaoAtual = scanner.nextLine();
+        String codigo = obterInput(scanner, "Código do cliente:");
+        String profissaoAtual = obterInput(scanner, "Profissão:");
 
         Endereco endereco = enderecoService.cadastrar(scanner);
 
@@ -34,16 +29,14 @@ public class ClienteService {
 
         Profissao profissao = new Profissao(profissaoAtual);
 
-        Telefone tel = new Telefone(ddd, numero);
-
         dao.salvar(cliente, profissao, endereco, tel);
 
         System.out.println("Cliente cadastrado.");
     }
 
+    @Override
     public void obterIdade(Scanner scanner, PessoaDAO dao) {
-        System.out.println("Id do cliente:");
-        int clienteId = scanner.nextInt();
+        int clienteId = obterInt(scanner, "Id do cliente:");
         scanner.nextLine();
         int idade = dao.obterIdade(clienteId);
 
