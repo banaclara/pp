@@ -7,7 +7,7 @@ import java.sql.*;
 public class EnderecoDAO {
     private final Connection connection;
 
-    public EnderecoDAO(Connection connection) throws SQLException {
+    public EnderecoDAO(Connection connection) {
         this.connection = connection;
     }
 

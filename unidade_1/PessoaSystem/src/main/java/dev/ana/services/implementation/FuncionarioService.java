@@ -1,73 +1,67 @@
 package dev.ana.services.implementation;
 
 import dev.ana.dao.FuncionarioDAO;
-import dev.ana.dao.PessoaDAO;
+import dev.ana.dto.DadosPessoa;
 import dev.ana.models.*;
 import dev.ana.services.FuncionarioServiceInterface;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 import static dev.ana.utils.Leitor.*;
 
-public class FuncionarioService implements FuncionarioServiceInterface {
-    EnderecoService enderecoService = new EnderecoService();
+public class FuncionarioService extends PessoaService implements FuncionarioServiceInterface {
+
+    private final FuncionarioDAO funcionarioDAO;
+
+    public FuncionarioService(Connection connection) {
+        super(connection);
+        this.funcionarioDAO = new FuncionarioDAO(connection);
+    }
 
     @Override
-    public void cadastrar(Scanner scanner, FuncionarioDAO dao) {
+    public void cadastrar(Scanner scanner) {
         System.out.println("Cadastrar novo funcionário:");
 
-        String nome = obterInput(scanner, "Nome:");
-        String nascimento = obterData(scanner, "Data de nascimento:");
-        Telefone tel = obterTelefone(scanner);
+        DadosPessoa pessoa = super.cadastrarPessoa(scanner);
 
         String matricula = obterInput(scanner, "Matrícula do funcionário:");
         Cargo cargo = obterCargo(scanner);
         double salario = obterDouble(scanner, "Salário:");
         String admissao = obterData(scanner, "Data de admissão:");
 
-        Endereco endereco = enderecoService.cadastrar(scanner);
+        Funcionario funcionario = new Funcionario(pessoa.getNome(), java.sql.Date.valueOf(pessoa.getNascimento()), matricula, salario, java.sql.Date.valueOf(admissao));
 
-        Funcionario funcionario = new Funcionario(nome, java.sql.Date.valueOf(nascimento), matricula, salario, java.sql.Date.valueOf(admissao));
-
-        dao.salvar(funcionario, endereco, cargo, tel);
+        funcionarioDAO.salvar(funcionario, pessoa.getEndereco(), cargo, pessoa.getTelefone());
 
         System.out.println("Funcionário cadastrado.");
     }
 
     @Override
-    public void reajustarSalario(Scanner scanner, FuncionarioDAO dao) {
+    public void reajustarSalario(Scanner scanner) {
         int funcionarioId = obterInt(scanner, "Id do funcionário:");
         scanner.nextLine();
         double percentualReajuste = obterDouble(scanner, "Percentual de reajuste salarial:");
         scanner.nextLine();
 
-        double salarioAtual = dao.getSalario(funcionarioId);
+        double salarioAtual = funcionarioDAO.getSalario(funcionarioId);
 
         if (salarioAtual > 0) {
             double novoSalario = salarioAtual + (salarioAtual * percentualReajuste / 100);
-            dao.atualizarSalario(funcionarioId, novoSalario);
+            funcionarioDAO.atualizarSalario(funcionarioId, novoSalario);
         } else {
             System.out.println("Funcionário não encontrado ou salário inválido.");
         }
     }
 
     @Override
-    public void promover(Scanner scanner, FuncionarioDAO dao) {
+    public void promover(Scanner scanner) {
         int funcionarioId = obterInt(scanner, "Id do funcionário:");
         scanner.nextLine();
         Cargo novoCargo = obterCargo(scanner);
 
-        dao.atualizarCargo(funcionarioId, novoCargo);
+        funcionarioDAO.atualizarCargo(funcionarioId, novoCargo);
 
         System.out.println("Novo cargo atribuído ao funcionário.");
-    }
-
-    @Override
-    public void obterIdade(Scanner scanner, PessoaDAO dao) {
-        int funcionarioId = obterInt(scanner, "Id do funcionário:");
-        scanner.nextLine();
-        int idade = dao.obterIdade(funcionarioId);
-
-        System.out.println("O funcionário tem " + idade + " anos.");
     }
 }

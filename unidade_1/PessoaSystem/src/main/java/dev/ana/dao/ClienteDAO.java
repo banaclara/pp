@@ -1,6 +1,5 @@
 package dev.ana.dao;
 
-import dev.ana.conn.Database;
 import dev.ana.models.Cliente;
 import dev.ana.models.Endereco;
 import dev.ana.models.Profissao;
@@ -15,7 +14,7 @@ public class ClienteDAO {
     private final PessoaDAO pessoaDAO;
     private final TelefoneDAO telefoneDAO;
 
-    public ClienteDAO(Connection connection) throws SQLException {
+    public ClienteDAO(Connection connection) {
         this.connection = connection;
         this.enderecoDAO = new EnderecoDAO(connection);
         this.profissaoDAO = new ProfissaoDAO(connection);

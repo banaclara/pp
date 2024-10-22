@@ -23,18 +23,18 @@ public class Leitor {
 
     public static Telefone obterTelefone(Scanner scanner) {
         System.out.println("Telefone:");
-        String ddd = obterInput(scanner, "DDD:");
+        String ddd = obterInput(scanner, "DDD: ");
         String numero = obterInput(scanner, "Número:");
         return new Telefone(ddd, numero);
     }
 
     public static String obterData(Scanner scanner, String legenda) {
         System.out.println(legenda);
-        System.out.print("Dia:");
+        System.out.print("Dia: ");
         int dia = scanner.nextInt();
-        System.out.print("Mês:");
+        System.out.print("Mês: ");
         int mes = scanner.nextInt();
-        System.out.print("Ano:");
+        System.out.print("Ano: ");
         int ano = scanner.nextInt();
         scanner.nextLine();
         return String.format("%04d-%02d-%02d", ano, mes, dia);

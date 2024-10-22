@@ -10,7 +10,7 @@ public class FuncionarioDAO {
     private final PessoaDAO pessoaDAO;
     private final TelefoneDAO telefoneDAO;
 
-    public FuncionarioDAO(Connection connection) throws SQLException {
+    public FuncionarioDAO(Connection connection) {
         this.connection = connection;
         this.enderecoDAO = new EnderecoDAO(connection);
         this.pessoaDAO = new PessoaDAO(connection);

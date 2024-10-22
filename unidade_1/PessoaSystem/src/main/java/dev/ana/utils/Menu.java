@@ -1,12 +1,10 @@
 package dev.ana.utils;
 
 import dev.ana.conn.Database;
-import dev.ana.dao.ClienteDAO;
-import dev.ana.dao.FuncionarioDAO;
-import dev.ana.dao.PessoaDAO;
-import dev.ana.services.implementation.ClienteService;
-import dev.ana.services.implementation.FuncionarioService;
+import dev.ana.controllers.ClienteController;
+import dev.ana.controllers.FuncionarioController;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -20,10 +18,10 @@ public class Menu {
             opt = scanner.nextInt();
             switch (opt) {
                 case 1:
-                    funcionarios(scanner, db.getFuncionarioDAO(), db.getPessoaDAO());
+                    funcionarios(scanner, db.getConnection());
                     break;
                 case 2:
-                    clientes(scanner, db.getClienteDAO(), db.getPessoaDAO());
+                    clientes(scanner, db.getConnection());
                     break;
                 case 3:
                     System.out.println("Encerrando...");
@@ -36,8 +34,8 @@ public class Menu {
         }
     }
 
-    private static void funcionarios(Scanner scanner, FuncionarioDAO dao, PessoaDAO pDAO) {
-        FuncionarioService service = new FuncionarioService();
+    private static void funcionarios(Scanner scanner, Connection conn) throws SQLException {
+        FuncionarioController funcionarioController = new FuncionarioController(conn);
         boolean sair = false;
 
         do {
@@ -53,16 +51,16 @@ public class Menu {
 
             switch (opcao) {
                 case 1:
-                    service.cadastrar(scanner, dao);
+                    funcionarioController.cadastrarFuncionario(scanner);
                     break;
                 case 2:
-                    service.promover(scanner, dao);
+                    funcionarioController.promoverFuncionario(scanner);
                     break;
                 case 3:
-                    service.reajustarSalario(scanner, dao);
+                    funcionarioController.reajustarSalario(scanner);
                     break;
                 case 4:
-                    service.obterIdade(scanner, pDAO);
+                    funcionarioController.obterIdade(scanner);
                     break;
                 case 0:
                     sair = true;
@@ -73,8 +71,8 @@ public class Menu {
         } while (!sair);
     }
 
-    private static void clientes(Scanner scanner, ClienteDAO dao, PessoaDAO pDAO) {
-        ClienteService service = new ClienteService();
+    private static void clientes(Scanner scanner, Connection conn) throws SQLException {
+        ClienteController clienteController = new ClienteController(conn);
         boolean sair = false;
 
         do {
@@ -88,10 +86,10 @@ public class Menu {
 
             switch (opcao) {
                 case 1:
-                    service.cadastrar(scanner, dao);
+                    clienteController.cadastrarCliente(scanner);
                     break;
                 case 2:
-                    service.obterIdade(scanner, pDAO);
+                    clienteController.obterIdade(scanner);
                 case 0:
                     sair = true;
                     break;

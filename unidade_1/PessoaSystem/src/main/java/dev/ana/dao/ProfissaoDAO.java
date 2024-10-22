@@ -9,7 +9,7 @@ public class ProfissaoDAO {
 
     private final Connection connection;
 
-    public ProfissaoDAO(Connection connection) throws SQLException {
+    public ProfissaoDAO(Connection connection) {
         this.connection = connection;
     }
 

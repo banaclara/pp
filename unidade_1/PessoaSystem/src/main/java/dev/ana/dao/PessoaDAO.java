@@ -10,7 +10,7 @@ import java.time.Period;
 public class PessoaDAO {
     private final Connection connection;
 
-    public PessoaDAO(Connection connection) throws SQLException {
+    public PessoaDAO(Connection connection) {
         this.connection = connection;
     }
 

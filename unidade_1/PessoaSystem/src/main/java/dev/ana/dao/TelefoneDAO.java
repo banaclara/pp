@@ -11,7 +11,7 @@ public class TelefoneDAO {
 
     private final Connection connection;
 
-    public TelefoneDAO(Connection connection) throws SQLException {
+    public TelefoneDAO(Connection connection) {
         this.connection = connection;
     }
 
