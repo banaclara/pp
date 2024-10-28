@@ -3,13 +3,12 @@ package dev.ana.controllers;
 import dev.ana.services.implementation.FuncionarioService;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FuncionarioController {
     private final FuncionarioService funcionarioService;
 
-    public FuncionarioController(Connection connection) throws SQLException {
+    public FuncionarioController(Connection connection) {
         this.funcionarioService = new FuncionarioService(connection);
     }
 

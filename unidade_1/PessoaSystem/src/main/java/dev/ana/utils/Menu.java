@@ -13,7 +13,8 @@ public class Menu {
         while (true) {
             System.out.println("1 - Funcionários");
             System.out.println("2 - Clientes");
-            System.out.println("3 - Sair do programa");
+            System.out.println("3 - Dependentes");
+            System.out.println("4 - Sair do programa");
             int opt;
             opt = scanner.nextInt();
             switch (opt) {
@@ -24,6 +25,9 @@ public class Menu {
                     clientes(scanner, db.getConnection());
                     break;
                 case 3:
+                    dependentes(scanner, db.getConnection());
+                    break;
+                case 4:
                     System.out.println("Encerrando...");
                     db.getConnection().close();
                     scanner.close();
@@ -34,7 +38,7 @@ public class Menu {
         }
     }
 
-    private static void funcionarios(Scanner scanner, Connection conn) throws SQLException {
+    private static void funcionarios(Scanner scanner, Connection conn) {
         FuncionarioController funcionarioController = new FuncionarioController(conn);
         boolean sair = false;
 
@@ -71,7 +75,7 @@ public class Menu {
         } while (!sair);
     }
 
-    private static void clientes(Scanner scanner, Connection conn) throws SQLException {
+    private static void clientes(Scanner scanner, Connection conn) {
         ClienteController clienteController = new ClienteController(conn);
         boolean sair = false;
 
@@ -90,6 +94,36 @@ public class Menu {
                     break;
                 case 2:
                     clienteController.obterIdade(scanner);
+                    break;
+                case 0:
+                    sair = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        } while (!sair);
+    }
+
+    private static void dependentes(Scanner scanner, Connection conn) {
+//        DependenteController dependenteController = new DependenteController(conn);
+        boolean sair = false;
+
+        do {
+            System.out.println("Escolha uma opção:");
+            System.out.println("1. Inserir dependente");
+            System.out.println("2. Consultar idade do dependente");
+            System.out.println("0. Voltar ao menu principal");
+
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
+                case 1:
+//                    dependenteController.cadastrarDependente(scanner);
+                    break;
+                case 2:
+//                    dependenteController.obterIdade(scanner);
+                    break;
                 case 0:
                     sair = true;
                     break;

@@ -3,13 +3,12 @@ package dev.ana.controllers;
 import dev.ana.services.implementation.ClienteService;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class ClienteController {
     private final ClienteService clienteService;
 
-    public ClienteController(Connection connection) throws SQLException {
+    public ClienteController(Connection connection) {
         this.clienteService = new ClienteService(connection);
     }
 

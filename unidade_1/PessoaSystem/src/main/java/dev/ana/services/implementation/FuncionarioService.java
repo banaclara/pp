@@ -50,6 +50,7 @@ public class FuncionarioService extends PessoaService implements FuncionarioServ
         if (salarioAtual > 0) {
             double novoSalario = salarioAtual + (salarioAtual * percentualReajuste / 100);
             funcionarioDAO.atualizarSalario(funcionarioId, novoSalario);
+            System.out.println("Aumento de " + percentualReajuste + "% aplicado. O salário do funcionário é " + novoSalario);
         } else {
             System.out.println("Funcionário não encontrado ou salário inválido.");
         }

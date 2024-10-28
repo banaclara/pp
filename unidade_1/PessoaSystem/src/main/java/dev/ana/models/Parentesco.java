@@ -1,10 +1,17 @@
 package dev.ana.models;
 
 public enum Parentesco {
-    MAE,
-    PAI,
     FILHO,
-    AVO,
+    FILHA,
+    PAI,
+    MÃE,
+    AVÔ,
+    AVÓ,
+    IRMÃO,
+    IRMÃ,
     TIO,
-    PRIMO;
+    TIA,
+    PRIMO,
+    PRIMA,
+    CÔNJUGE;
 }
