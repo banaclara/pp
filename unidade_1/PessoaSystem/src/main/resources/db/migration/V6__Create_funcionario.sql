@@ -1,5 +1,5 @@
 CREATE TABLE Funcionario (
-    id INT PRIMARY KEY,
+    id UUID PRIMARY KEY,
     matricula VARCHAR(15) NOT NULL,
     cargo cargo_enum NOT NULL,
     salario DECIMAL(10, 2) NOT NULL,

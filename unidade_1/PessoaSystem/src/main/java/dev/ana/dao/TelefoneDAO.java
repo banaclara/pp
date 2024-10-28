@@ -6,6 +6,7 @@ import dev.ana.models.Telefone;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class TelefoneDAO {
 
@@ -15,12 +16,14 @@ public class TelefoneDAO {
         this.connection = connection;
     }
 
-    public void salvarTelefone(Telefone telefone, int pessoaId) {
-        String inserirTelefone = "INSERT INTO Telefone (ddd, numero, pessoa_id) VALUES (?, ?, ?)";
+    public void salvarTelefone(Telefone telefone, UUID pessoaId) {
+        UUID telId = UUID.randomUUID();
+        String inserirTelefone = "INSERT INTO Telefone (id, ddd, numero, pessoa_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement salvarTelefone = connection.prepareStatement(inserirTelefone)) {
-            salvarTelefone.setString(1, telefone.getDdd());
-            salvarTelefone.setString(2, telefone.getNumero());
-            salvarTelefone.setInt(3, pessoaId);
+            salvarTelefone.setObject(1, telId);
+            salvarTelefone.setString(2, telefone.getDdd());
+            salvarTelefone.setString(3, telefone.getNumero());
+            salvarTelefone.setObject(4, pessoaId);
             salvarTelefone.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

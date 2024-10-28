@@ -4,6 +4,7 @@ import dev.ana.models.Cargo;
 import dev.ana.models.Telefone;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Leitor {
     public static String obterInput(Scanner scanner, String legenda) {
@@ -19,6 +20,17 @@ public class Leitor {
     public static int obterInt(Scanner scanner, String legenda) {
         System.out.println(legenda);
         return scanner.nextInt();
+    }
+
+    public static UUID obterUUID(Scanner scanner, String legenda) {
+        System.out.println(legenda);
+        String id = scanner.nextLine();
+        try {
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Formato inválido de UUID. Tente novamente.");
+            return null;
+        }
     }
 
     public static Telefone obterTelefone(Scanner scanner) {

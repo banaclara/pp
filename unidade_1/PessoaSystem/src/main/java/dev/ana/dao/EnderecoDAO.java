@@ -3,6 +3,7 @@ package dev.ana.dao;
 import dev.ana.models.Endereco;
 
 import java.sql.*;
+import java.util.UUID;
 
 public class EnderecoDAO {
     private final Connection connection;
@@ -11,9 +12,9 @@ public class EnderecoDAO {
         this.connection = connection;
     }
 
-    public int buscarOuCriar(Endereco endereco) {
+    public UUID buscarOuCriar(Endereco endereco) {
         String consulta = "SELECT id FROM Endereco WHERE pais = ? AND estado = ? AND cidade = ? AND rua = ? AND cep = ? AND numero = ? AND complemento = ?";
-        String inserir = "INSERT INTO Endereco (pais, estado, cidade, rua, cep, numero, complemento) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String inserir = "INSERT INTO Endereco (id, pais, estado, cidade, rua, cep, numero, complemento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             try (PreparedStatement buscarNoDB = connection.prepareStatement(consulta)) {
@@ -27,29 +28,26 @@ public class EnderecoDAO {
                 ResultSet resultadoConsulta = buscarNoDB.executeQuery();
 
                 if (resultadoConsulta.next()) {
-                    return resultadoConsulta.getInt("id");
+                    return (UUID) resultadoConsulta.getObject("id");
                 }
             }
 
-            try (PreparedStatement salvarEndereco = connection.prepareStatement(inserir, Statement.RETURN_GENERATED_KEYS)) {
-                salvarEndereco.setString(1, endereco.getPais());
-                salvarEndereco.setString(2, endereco.getEstado());
-                salvarEndereco.setString(3, endereco.getCidade());
-                salvarEndereco.setString(4, endereco.getRua());
-                salvarEndereco.setString(5, endereco.getCEP());
-                salvarEndereco.setString(6, endereco.getNumero());
-                salvarEndereco.setString(7, endereco.getComplemento());
+            UUID idEndereco = UUID.randomUUID();
+            try (PreparedStatement salvarEndereco = connection.prepareStatement(inserir)) {
+                salvarEndereco.setObject(1, idEndereco);
+                salvarEndereco.setString(2, endereco.getPais());
+                salvarEndereco.setString(3, endereco.getEstado());
+                salvarEndereco.setString(4, endereco.getCidade());
+                salvarEndereco.setString(5, endereco.getRua());
+                salvarEndereco.setString(6, endereco.getCEP());
+                salvarEndereco.setString(7, endereco.getNumero());
+                salvarEndereco.setString(8, endereco.getComplemento());
                 salvarEndereco.executeUpdate();
-
-                ResultSet resultadoInsert = salvarEndereco.getGeneratedKeys();
-                if (resultadoInsert.next()) {
-                    return resultadoInsert.getInt(1);
-                }
+                return idEndereco;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return -1;
+        return null;
     }
 }

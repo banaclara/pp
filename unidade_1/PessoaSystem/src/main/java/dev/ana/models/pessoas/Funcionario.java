@@ -1,4 +1,6 @@
-package dev.ana.models;
+package dev.ana.models.pessoas;
+
+import dev.ana.models.Cargo;
 
 import java.util.Date;
 

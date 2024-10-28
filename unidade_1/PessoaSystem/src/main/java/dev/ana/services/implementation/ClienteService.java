@@ -3,6 +3,7 @@ package dev.ana.services.implementation;
 import dev.ana.dao.ClienteDAO;
 import dev.ana.dto.DadosPessoa;
 import dev.ana.models.*;
+import dev.ana.models.pessoas.Cliente;
 import dev.ana.services.ClienteServiceInterface;
 
 import java.sql.Connection;

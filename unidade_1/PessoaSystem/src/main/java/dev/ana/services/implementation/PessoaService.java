@@ -8,6 +8,7 @@ import dev.ana.services.PessoaServiceInterface;
 
 import java.sql.Connection;
 import java.util.Scanner;
+import java.util.UUID;
 
 import static dev.ana.utils.Leitor.*;
 
@@ -22,8 +23,7 @@ public class PessoaService implements PessoaServiceInterface {
 
     @Override
     public void obterIdade(Scanner scanner) {
-        int pessoaId = obterInt(scanner, "Id da pessoa:");
-        scanner.nextLine();
+        UUID pessoaId = obterUUID(scanner, "Id da pessoa:");
         int idade = pessoaDAO.obterIdade(pessoaId);
         System.out.println("Idade: " + idade + " anos.");
     }

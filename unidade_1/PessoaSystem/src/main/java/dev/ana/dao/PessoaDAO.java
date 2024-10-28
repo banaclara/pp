@@ -1,11 +1,11 @@
 package dev.ana.dao;
 
-import dev.ana.conn.Database;
-import dev.ana.models.Pessoa;
+import dev.ana.models.pessoas.Pessoa;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.UUID;
 
 public class PessoaDAO {
     private final Connection connection;
@@ -14,30 +14,26 @@ public class PessoaDAO {
         this.connection = connection;
     }
 
-    public int salvar(Pessoa pessoa, int enderecoId) {
-        String inserir = "INSERT INTO Pessoa (nome, dataNascimento, endereco_id) VALUES (?, ?, ?)";
-
-        try (PreparedStatement salvarPessoa = connection.prepareStatement(inserir, Statement.RETURN_GENERATED_KEYS)) {
-            salvarPessoa.setString(1, pessoa.getNome());
-            salvarPessoa.setDate(2, pessoa.getDataNascimento());
-            salvarPessoa.setInt(3, enderecoId);
+    public UUID salvar(Pessoa pessoa, UUID enderecoId) {
+        UUID idPessoa = UUID.randomUUID();
+        String inserir = "INSERT INTO Pessoa (id, nome, dataNascimento, endereco_id) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement salvarPessoa = connection.prepareStatement(inserir)) {
+            salvarPessoa.setObject(1, idPessoa);
+            salvarPessoa.setString(2, pessoa.getNome());
+            salvarPessoa.setDate(3, pessoa.getDataNascimento());
+            salvarPessoa.setObject(4, enderecoId);
             salvarPessoa.executeUpdate();
-
-            ResultSet resultadoInsert = salvarPessoa.getGeneratedKeys();
-            if (resultadoInsert.next()) {
-                return resultadoInsert.getInt(1);
-            }
+            return idPessoa;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return -1;
+        return null;
     }
 
-    public int obterIdade(int pessoaId) {
+    public int obterIdade(UUID pessoaId) {
         String sql = "SELECT dataNascimento FROM Pessoa WHERE id = ?";
         try (PreparedStatement consulta = connection.prepareStatement(sql)) {
-            consulta.setInt(1, pessoaId);
+            consulta.setObject(1, pessoaId);
             ResultSet resultadoConsulta = consulta.executeQuery();
             if (resultadoConsulta.next()) {
                 Date dataNascimento = resultadoConsulta.getDate("dataNascimento");

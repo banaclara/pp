@@ -3,10 +3,12 @@ package dev.ana.services.implementation;
 import dev.ana.dao.FuncionarioDAO;
 import dev.ana.dto.DadosPessoa;
 import dev.ana.models.*;
+import dev.ana.models.pessoas.Funcionario;
 import dev.ana.services.FuncionarioServiceInterface;
 
 import java.sql.Connection;
 import java.util.Scanner;
+import java.util.UUID;
 
 import static dev.ana.utils.Leitor.*;
 
@@ -39,8 +41,7 @@ public class FuncionarioService extends PessoaService implements FuncionarioServ
 
     @Override
     public void reajustarSalario(Scanner scanner) {
-        int funcionarioId = obterInt(scanner, "Id do funcionário:");
-        scanner.nextLine();
+        UUID funcionarioId = obterUUID(scanner, "Id do funcionário:");
         double percentualReajuste = obterDouble(scanner, "Percentual de reajuste salarial:");
         scanner.nextLine();
 
@@ -56,8 +57,7 @@ public class FuncionarioService extends PessoaService implements FuncionarioServ
 
     @Override
     public void promover(Scanner scanner) {
-        int funcionarioId = obterInt(scanner, "Id do funcionário:");
-        scanner.nextLine();
+        UUID funcionarioId = obterUUID(scanner, "Id do funcionário:");
         Cargo novoCargo = obterCargo(scanner);
 
         funcionarioDAO.atualizarCargo(funcionarioId, novoCargo);

@@ -1,5 +1,5 @@
 CREATE TABLE Endereco (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     pais VARCHAR(100) NOT NULL,
     estado VARCHAR(100) NOT NULL,
     cidade VARCHAR(100) NOT NULL,

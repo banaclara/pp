@@ -1,8 +1,10 @@
 package dev.ana.dao;
 
 import dev.ana.models.*;
+import dev.ana.models.pessoas.Funcionario;
 
 import java.sql.*;
+import java.util.UUID;
 
 public class FuncionarioDAO {
     private final Connection connection;
@@ -18,14 +20,14 @@ public class FuncionarioDAO {
     }
 
     public void salvar(Funcionario funcionario, Endereco endereco, Cargo cargo, Telefone telefone) {
-        int enderecoId = enderecoDAO.buscarOuCriar(endereco);
+        UUID enderecoId = enderecoDAO.buscarOuCriar(endereco);
 
-        int idPessoa = pessoaDAO.salvar(funcionario, enderecoId);
+        UUID idPessoa = pessoaDAO.salvar(funcionario, enderecoId);
         funcionario.setId(idPessoa);
 
         String inserir = "INSERT INTO Funcionario (id, matricula, cargo, salario, dataAdmissao) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement salvarFuncionario = connection.prepareStatement(inserir)) {
-            salvarFuncionario.setInt(1, funcionario.getId());
+            salvarFuncionario.setObject(1, funcionario.getId());
             salvarFuncionario.setString(2, funcionario.getMatricula());
             salvarFuncionario.setObject(3, cargo, java.sql.Types.OTHER);
             salvarFuncionario.setDouble(4, funcionario.getSalario());
@@ -40,20 +42,20 @@ public class FuncionarioDAO {
         }
     }
 
-    public void deletar(int id) {
+    public void deletar(UUID id) {
         String sql = "DELETE FROM Pessoa WHERE id = ?";
         try (PreparedStatement deletar = connection.prepareStatement(sql)) {
-            deletar.setInt(1, id);
+            deletar.setObject(1, id);
             deletar.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public double getSalario(int funcionarioId) {
+    public double getSalario(UUID funcionarioId) {
         String sql = "SELECT salario FROM Funcionario WHERE id = ?";
         try (PreparedStatement consulta = connection.prepareStatement(sql)) {
-            consulta.setInt(1, funcionarioId);
+            consulta.setObject(1, funcionarioId);
             ResultSet resultadoConsulta = consulta.executeQuery();
             if (resultadoConsulta.next()) {
                 return resultadoConsulta.getDouble("salario");
@@ -64,23 +66,23 @@ public class FuncionarioDAO {
         return 0;
     }
 
-    public void atualizarSalario(int funcionarioId, double novoSalario) {
+    public void atualizarSalario(UUID funcionarioId, double novoSalario) {
         String sql = "UPDATE Funcionario SET salario = ? WHERE id = ?";
         try (PreparedStatement atualizarSalario = connection.prepareStatement(sql)) {
             atualizarSalario.setDouble(1, novoSalario);
-            atualizarSalario.setInt(2, funcionarioId);
+            atualizarSalario.setObject(2, funcionarioId);
             atualizarSalario.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void atualizarCargo(int funcionarioId, Cargo cargo) {
+    public void atualizarCargo(UUID funcionarioId, Cargo cargo) {
         String sql = "UPDATE Funcionario SET cargo = ? WHERE id = ?";
 
         try (PreparedStatement atualizarCargo = connection.prepareStatement(sql)) {
             atualizarCargo.setObject(1, cargo, java.sql.Types.OTHER);
-            atualizarCargo.setInt(2, funcionarioId);
+            atualizarCargo.setObject(2, funcionarioId);
             atualizarCargo.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
