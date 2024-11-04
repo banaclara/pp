@@ -1,73 +1,50 @@
 package dev.ana.conn;
 
-import dev.ana.dao.ClienteDAO;
-import dev.ana.dao.FuncionarioDAO;
-import dev.ana.dao.PessoaDAO;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.flywaydb.core.Flyway;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Database {
-    Dotenv dotenv = Dotenv.load();
-    private final String url = dotenv.get("DB_URL");
-    private final String user = dotenv.get("DB_USER");
-    private final String password = dotenv.get("DB_PASSWORD");
-    private final FuncionarioDAO funcionarioDAO;
-    private final ClienteDAO clienteDAO;
-    private final PessoaDAO pessoaDAO;
+    private static Database instance;
+    private final String url;
+    private final String user;
+    private final String password;
     private final Connection connection;
 
-    public Database() throws SQLException {
+    private Database() throws SQLException {
+        Dotenv dotenv = Dotenv.load();
+        this.url = dotenv.get("DB_URL");
+        this.user = dotenv.get("DB_USER");
+        this.password = dotenv.get("DB_PASSWORD");
+
+        this.connection = DriverManager.getConnection(url, user, password);
+
         flywayMigrate();
+    }
 
-        connection = DriverManager.getConnection(url, user, password);
-
-        funcionarioDAO = new FuncionarioDAO(connection);
-        clienteDAO = new ClienteDAO(connection);
-        pessoaDAO = new PessoaDAO(connection);
+    public static synchronized Database getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new Database();
+        }
+        return instance;
     }
 
     private void flywayMigrate() {
-        Logger logger = Logger.getLogger("org.flywaydb");
-        logger.setLevel(Level.WARNING);
-
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.WARNING);
-        logger.addHandler(handler);
-
         Flyway flyway = Flyway.configure()
                 .dataSource(url, user, password)
                 .load();
 
-        try {
-            var res = flyway.migrate();
-            int migrationsAplicadas = res.migrationsExecuted;
-            if (migrationsAplicadas > 0) {
-                System.out.println("Migrations aplicadas.");
-            } else {
-                System.out.println();
+        if (flyway.info().pending().length > 0) {
+            try {
+                flyway.migrate();
+                System.out.println("Migrations aplicadas ao banco de dados.");
+            } catch (Exception e) {
+                System.out.println("Erro ao executar migrations: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.out.println("Erro ao executar migrations: " + e.getMessage());
         }
-    }
-
-    public FuncionarioDAO getFuncionarioDAO() {
-        return funcionarioDAO;
-    }
-
-    public ClienteDAO getClienteDAO() {
-        return clienteDAO;
-    }
-
-    public PessoaDAO getPessoaDAO() {
-        return pessoaDAO;
     }
 
     public Connection getConnection() {

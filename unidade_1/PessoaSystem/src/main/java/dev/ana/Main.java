@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try {
-            Database db = new Database();
+            Database db = Database.getInstance();
             Scanner scanner = new Scanner(System.in);
 
             Menu.principal(scanner, db);
